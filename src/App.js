@@ -12,8 +12,14 @@ function App() {
 
 
     
+    <Routes>
+    <Route  path="/" element={ <Fragment><Tasks/> </Fragment>} />
+    <Route  path="/admin" element={ <Fragment> <Admin/> </Fragment>} />
    
-    <Tasks/>
+    
+    </Routes>
+     
+   
    
 
     </div>
