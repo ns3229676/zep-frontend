@@ -16,7 +16,7 @@ function Tasks() {
     <div>
 
     <div >
-    <h1 className='tasks__firstHeading'>CLAIMYOUR FREE AIRDROP</h1>
+    <h1 className='tasks__firstHeading'>CLAIMYOUR YOUR FREE 5k AIRDROP</h1>
     </div>
 
     <div className='tasks'>
@@ -26,7 +26,19 @@ function Tasks() {
     <div className='tasks__details'>
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>Follow @ZEPCOIN on twitter</h1>
+    <h1 className='tasks__div__heading'>1. Enter your wallet Address</h1>
+    <input placeholder='type wallet address' className='input_wallet_address'></input>
+
+    <p className='tasks__points__block'>+ 500</p>
+
+    {twitterFollow ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
+
+   
+
+    </div>
+
+    <div className='tasks__div'>
+    <h1 className='tasks__div__heading'>2. Follow @ZEPCOIN on twitter</h1>
     <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setTwitterfollow(true)}>follow on twitter</a></button>
 
     <p className='tasks__points__block'>+ 500</p>
@@ -36,7 +48,7 @@ function Tasks() {
     </div>
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>Join @ZEPCOIN on telegram</h1>
+    <h1 className='tasks__div__heading'>3. Join @ZEPCOIN on telegram</h1>
 
     <button className='tasks__div__button'> <a target="_blank" href='https://t.me/zepCoinOfficial' className='tasks__div__links' onClick={()=>setJointelegram(true)}>Join Telegram</a></button>
 
@@ -47,7 +59,7 @@ function Tasks() {
     </div>
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>Retweet @ZEPCOIN on twitter</h1>
+    <h1 className='tasks__div__heading'>4. Retweet @ZEPCOIN on twitter</h1>
 
     <button className='tasks__div__button zepcoinButton'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setRetweet(true)}>retweet on twitter</a></button>
 
@@ -60,7 +72,7 @@ function Tasks() {
 
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>Tweet @ZEPCOIN on twitter</h1>
+    <h1 className='tasks__div__heading'>5. Tweet @ZEPCOIN on twitter</h1>
 
     <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setTweet(true)}>tweet on twitter</a></button>
 
