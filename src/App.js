@@ -5,12 +5,13 @@ import { Router, Routes, Route, useLocation } from 'react-router-dom';
 import Admin from './Admin'
 import { Fragment,useEffect} from 'react';
 import Login from './Login';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <div className="App">
-
+    <ToastContainer />
 
     
     <Routes>
