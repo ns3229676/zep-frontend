@@ -1,5 +1,10 @@
 .tasks{
+    background-color: #fbf4f4;
+    width: 77%;
+    margin: auto;
+    padding: 1%;
     margin-top: 5%;
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
 }
 
 .tasks__div{
@@ -18,19 +23,36 @@
     
 }
 
+
+.logout__button__forResponsive{
+
+    border: none;
+    padding: 1%;
+    background-color: #fbf4f4;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.logout__button__forResponsive:hover{
+
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+}
+
 .buy{
-    margin-right: 29%;
+    margin-right: 31%;
+
 }
 
 .input_wallet_address{
-    margin-left: 30px;
-    text-align: center;
-    font-size: 14px;
-    color: red;
-    border: none;
-    border-radius: 14px;
     width: 10%;
     height: 35px;
+    border-radius: 14px;
+    border: none;
+    font-size: 14px;
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+    background-color: white;
+    margin-left: 30px;
+    text-align: center;
     outline: none;
 }
 
@@ -40,6 +62,9 @@
     height: 35px;
     border-radius: 14px;
     border: none;
+    font-size: 16px;
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+    background-color: white;
 }
 
 
@@ -59,7 +84,7 @@
 .tasks__div__links{
     text-decoration: none;
     font-size: 15px;
-    color: red;
+    color: gray;
 }
 
 
@@ -73,3 +98,6 @@
     color: green;
     font-weight: 500;
 }
+
+
+

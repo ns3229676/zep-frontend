@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useEffect, useState} from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 import './Tasks.css'
@@ -31,6 +31,7 @@ function Tasks() {
     const saveTasks = async ()=>{
      const response = await axios.post('/savetasks',
       {
+        loggedUserData,
         twitterFollow,
         joinTelegram,
         retweet,
@@ -42,6 +43,8 @@ function Tasks() {
       console.log('saved tasks')
       console.log(response)
     }
+
+    
 
     if(twitterFollow && joinTelegram && retweet && tweet && walletAddress){
       
@@ -74,6 +77,37 @@ function Tasks() {
     };
 
     const tweetData = 'Guyzz I have found this intresting Crypto ICO#ZEPCOIN  Its live now. Its $0.0001 $ZEP 🤑🤑 Zep it now.ZIP.....ZAP.....ZOOP🤗🤗🤗visit- https://zepcoin.io/join the community also- https://bit.ly/zepcoin#Zepians #newcrypto'
+
+    const fetchTasksdata =  async ()=>{
+
+      console.log('fetch task data')
+      console.log(loggedUserData)
+
+      const response = await axios.post('/gettasksdata',
+      {data :loggedUserData},
+      {withCredentials: true}
+      
+      )
+
+      console.log('response data')
+      console.log(response)
+
+      setTwitterfollow(response.data.twitterFollow)
+      setJointelegram(response.data.joinTelegram)
+      setRetweet(response.data.retweet)
+      setTweet(response.data.tweet)
+      setWalletaddress(response.data.walletAddress)
+
+    }
+      
+      
+    
+     
+
+
+    useEffect(()=>{
+      fetchTasksdata();
+    },loggedUserData)
 
   return (
 
@@ -110,7 +144,7 @@ function Tasks() {
 
     <div className='tasks__div'>
     <h1 className='tasks__div__heading'>2. Follow @ZEPCOIN on twitter</h1>
-    <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setTwitterfollow(true)}>follow on twitter</a></button>
+    <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setTwitterfollow(true)}>Click to Follow</a></button>
 
     <p className='tasks__points__block'>+ 500</p>
 
@@ -121,7 +155,7 @@ function Tasks() {
     <div className='tasks__div'>
     <h1 className='tasks__div__heading'>3. Join @ZEPCOIN on telegram</h1>
 
-    <button className='tasks__div__button'> <a target="_blank" href='https://t.me/zepCoinOfficial' className='tasks__div__links' onClick={()=>setJointelegram(true)}>Join Telegram</a></button>
+    <button className='tasks__div__button'> <a target="_blank" href='https://t.me/zepCoinOfficial' className='tasks__div__links' onClick={()=>setJointelegram(true)}>Click to Join</a></button>
 
     <p className='tasks__points__block'>+ 500</p>
 
@@ -132,7 +166,7 @@ function Tasks() {
     <div className='tasks__div'>
     <h1 className='tasks__div__heading'>4. Retweet @ZEPCOIN on twitter</h1>
 
-    <button className='tasks__div__button zepcoinButton'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setRetweet(true)}>retweet on twitter</a></button>
+    <button className='tasks__div__button zepcoinButton'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setRetweet(true)}>Click to Retweet</a></button>
 
     <p className='tasks__points__block'>+ 500</p>
 
@@ -143,7 +177,7 @@ function Tasks() {
 
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>5. Tweet @ZEPCOIN on twitter</h1>
+    <h1 className='tasks__div__heading tweet__on__twitter'>5. Tweet @ZEPCOIN on twitter</h1>
 
     <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/intent/tweet?text=Guyzz I have found this intresting Crypto ICO 
     Its live now. Its $0.0001 $ZEP 🤑🤑 Zep it now.
@@ -153,7 +187,7 @@ function Tasks() {
     
     visit- https://zepcoin.io/
     join the community also- https://bit.ly/zepcoin
-    #Zepians #newcrypto' className='tasks__div__links' onClick={()=>setTweet(true)}>tweet on twitter</a></button>
+    #Zepians #newcrypto' className='tasks__div__links' onClick={()=>setTweet(true)}>Click For Tweet</a></button>
 
     <p className='tasks__points__block'>+ 500</p>
 

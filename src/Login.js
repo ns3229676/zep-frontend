@@ -177,7 +177,7 @@ function Login() {
     
 
   return (
-    <div>
+    <div className='login'>
 
     <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -186,18 +186,27 @@ function Login() {
           <CircularProgress color="inherit" />
     </Backdrop>
 
-    <input placeholder='enter email'  value={email} onChange={forEmail}/>
-    <input  type={passwordType} placeholder='enter password' value={password} onChange={forPassword}/>
+    <input className='login__input' placeholder='enter email'  value={email} onChange={forEmail}/>
+
+    <div className='password__div'>
+    <input className='login__input' type={passwordType} placeholder='enter password' value={password} onChange={forPassword}/>
 
     <div className='togglePassword'>
     {passwordType === 'password' ? <VisibilityIcon className='toggleButton' onClick={togglePassword}/>   : <VisibilityOffIcon className='toggleButton' onClick={togglePassword}/>}
-    {passwordType === 'password' ?   (<p className='showPassword'>Show password</p>) :  (<p className='showPassword'>Hide password</p>)}
+   
     
     
     </div>
 
-    <button onClick={signIn}>sign In</button>
-    <button onClick={logIn}>Log In</button>
+    </div>
+
+    <div className='login__buttons'>
+
+    <button className='login__signIn__button' onClick={signIn}>sign In</button>
+    <button className='login__logIn__button' onClick={logIn}>Log In</button>
+
+    </div>
+
     </div>
   )
 }
