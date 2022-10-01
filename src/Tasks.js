@@ -12,6 +12,11 @@ import { ToastContainer, toast } from 'react-toastify';
 
 function Tasks() {
     const navigate = useNavigate();
+    const [checkTweet,setChecktweet] = useState('')
+    const [checkFollower,setCheckfollower] = useState('')
+    const [checkRetweet,setCheckretweet] = useState('')
+    const [checkusername,setCheckusername] = useState('')
+    const [checkusernameTrueorfalse,setCheckusernameTrueorfalse] = useState(false)
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
     const [twitterFollow,setTwitterfollow] = useState(false);
@@ -144,7 +149,21 @@ function Tasks() {
 
     <div className='tasks__div'>
     <h1 className='tasks__div__heading'>2. Follow @ZEPCOIN on twitter</h1>
-    <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setTwitterfollow(true)}>Click to Follow</a></button>
+    <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' >Click to Follow</a></button>
+
+
+    <input className='tasks__div__checkFollower' placeholder='Enter twitter user id' value={checkFollower} onChange={(event)=> setCheckfollower(event.target.value)}/>
+    <button className='tasks__div__checkFollower__button' onClick={async ()=>{
+     const response = await axios.post('/checkfollower',
+      {
+        checkFollower : checkFollower
+      },
+      { withCredentials: true }
+     )
+     console.log('response from check follower')
+     console.log(response.data.relationship.source.followed_by)
+    setTwitterfollow(response.data.relationship.source.followed_by)
+    }}>Continue</button>
 
     <p className='tasks__points__block'>+ 500</p>
 
@@ -170,7 +189,34 @@ function Tasks() {
 
     <p className='tasks__points__block'>+ 500</p>
 
-    {retweet ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
+    <input className='tasks__div__checkRetweet' placeholder='enter retweet page id' value={checkRetweet} onChange={(event)=>{ setCheckretweet(event.target.value)}}/>
+
+    <input placeholder='enter twitter user name to check retweet' value={checkusername} onChange={(event)=> setCheckusername(event.target.value)}/>
+
+    <button onClick={async ()=>{
+      const response = await axios.post('/checkretweeted',
+        {
+          checkRetweet : checkRetweet
+        },
+        { withCredentials: true }
+      )
+
+     
+
+      response.data.data.map((data)=>{
+        console.log(data.username)
+
+        if(data.username === checkusername){
+           setCheckusernameTrueorfalse(true)
+           return
+        }
+
+      })
+
+
+    }}>Continue</button>
+
+    {checkusernameTrueorfalse ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
 
     </div>
 
@@ -188,6 +234,22 @@ function Tasks() {
     visit- https://zepcoin.io/
     join the community also- https://bit.ly/zepcoin
     #Zepians #newcrypto' className='tasks__div__links' onClick={()=>setTweet(true)}>Click For Tweet</a></button>
+
+    <input className='tasks__div__checkTweet' placeholder='Enter tweet Id' value={checkTweet} onChange={(event)=> setChecktweet(event.target.value)} />
+
+    <button className='tasks__div__checkTweet__button' onClick={async ()=>{
+      const response = await axios.post('/checktweet',
+        {
+          tweetId : checkTweet
+        },
+        { withCredentials: true }
+      )
+
+      console.log('response from tweet id')
+    
+      console.log(response)
+
+    }}>Continue</button>
 
     <p className='tasks__points__block'>+ 500</p>
 
