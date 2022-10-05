@@ -11,6 +11,7 @@ import { useNavigate ,Link} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 function Tasks() {
+  
     const navigate = useNavigate();
     const [checkTweet,setChecktweet] = useState('')
     const [checkFollower,setCheckfollower] = useState('')
@@ -24,8 +25,9 @@ function Tasks() {
     const [buy,setBuy] = useState(false);
     const [retweet,setRetweet] = useState(false);
     const [tweet,setTweet] = useState(false);
-    const [walletAddress,setWalletaddress] = useState(false);
-    const [checkFollowOrnot,setCheckfollowornot] = useState('')
+    const [walletAddress,setWalletaddress] = useState('');
+    const [walletAddressstatus,setWalletaddressstatus] = useState('');
+    // const [checkFollowOrnot,setCheckfollowornot] = useState('')
     const loggedUserData = useSelector((state) => state.userReducer.user);
     const [provider,setProvider] = useState(null);
 
@@ -33,28 +35,9 @@ function Tasks() {
 
     console.log(twitterFollow,joinTelegram,retweet,tweet,walletAddress)
 
-    const saveTasks = async ()=>{
-     const response = await axios.post('/savetasks',
-      {
-        loggedUserData,
-        twitterFollow,
-        joinTelegram,
-        retweet,
-        tweet,
-        walletAddress,
-      },
-      { withCredentials: true })
-
-      console.log('saved tasks')
-      console.log(response)
-    }
-
     
 
-    if(twitterFollow && joinTelegram && retweet && tweet && walletAddress){
-      
-      saveTasks();
-    }
+ 
 
     const logoutAdmin = async () => {
     
@@ -83,36 +66,89 @@ function Tasks() {
 
     const tweetData = 'Guyzz I have found this intresting Crypto ICO#ZEPCOIN  Its live now. Its $0.0001 $ZEP 🤑🤑 Zep it now.ZIP.....ZAP.....ZOOP🤗🤗🤗visit- https://zepcoin.io/join the community also- https://bit.ly/zepcoin#Zepians #newcrypto'
 
-    const fetchTasksdata =  async ()=>{
-
-      console.log('fetch task data')
-      console.log(loggedUserData)
-
-      const response = await axios.post('/gettasksdata',
-      {data :loggedUserData},
-      {withCredentials: true}
+   
       
-      )
-
-      console.log('response data')
-      console.log(response)
-
-      setTwitterfollow(response.data.twitterFollow)
-      setJointelegram(response.data.joinTelegram)
-      setRetweet(response.data.retweet)
-      setTweet(response.data.tweet)
-      setWalletaddress(response.data.walletAddress)
-
+      
+    const saveretweetstatus = async ()=>{
+      try{
+        await axios.post('/saveretweettaskstatus',{
+          retweet : true,
+          loggedUserData : loggedUserData
+        },{withCredentials : true});
+      }catch(err){
+        console.log(err)
+      }
     }
-      
-      
     
-     
+    const FetchTasks = async ()=>{
 
+      const adminloginorlogoutStatus = await axios.get('/adminloginorlogout',{withCredentials: true})
+      console.log('adminloginorlogoutstatus')
+      console.log(adminloginorlogoutStatus)
+      dispatch(addUser(adminloginorlogoutStatus.data));
+
+
+      const followTaskresponse = await axios.post('/fetchfollowtaskresponse',{
+        loggedUserData : adminloginorlogoutStatus.data
+      },{withCredentials: true})
+
+      const retweetTaskresponse = await axios.post('/fetchretweetTaskresponse',{
+        loggedUserData : adminloginorlogoutStatus.data
+      },{withCredentials: true})
+
+      const walletAddresstaskresponse = await axios.post('/fetchwalletAddressresponse',{
+        loggedUserData : adminloginorlogoutStatus.data
+      },{withCredentials: true})
+
+      const tweettaskresponse = await axios.post('/fetchtweettaskresponse',{
+        loggedUserData : adminloginorlogoutStatus.data
+      },{withCredentials: true})
+
+
+      setTwitterfollow(followTaskresponse?.data?.twitterFollow)
+      setCheckusernameTrueorfalse(retweetTaskresponse?.data?.retweet)
+      setTweet(tweettaskresponse?.data?.tweet)
+
+      if (walletAddresstaskresponse?.data === null){
+
+        setWalletaddressstatus(false)
+      }else{
+        setWalletaddressstatus(true)
+
+      }
+
+
+      console.log('response from fetchfollowtaskresponse')
+      console.log(followTaskresponse?.data?.twitterFollow)
+
+      console.log('response from fetchretweetTaskresponse')
+      console.log(retweetTaskresponse)
+
+      console.log('response from walletAddresstaskresponse')
+      console.log(walletAddresstaskresponse)
+
+      console.log('response from tweettaskresponse')
+      console.log(tweettaskresponse)
+      
+    }
 
     useEffect(()=>{
-      fetchTasksdata();
-    },loggedUserData)
+      FetchTasks();
+    },[])
+
+    const savetweettaskstatus = async ()=>{
+
+    const response =   await axios.post('/savetweettaskstatus',{
+        tweet : true,
+        loggedUserData : loggedUserData
+      },{withCredentials : true})
+      
+      console.log(response)
+    }
+
+
+  
+  
 
   return (
 
@@ -137,11 +173,25 @@ function Tasks() {
 
     <div className='tasks__div'>
     <h1 className='tasks__div__heading'>1. Enter your wallet Address</h1>
-    <input onChange={()=>setWalletaddress(true)} placeholder='type wallet address' className='input_wallet_address'/>
+    <input value={walletAddress} onChange={(e)=>setWalletaddress(e.target.value)} placeholder='type wallet address' className='input_wallet_address'/>
 
     <p className='tasks__points__block'>+ 500</p>
 
-    {walletAddress ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
+    <button onClick={async ()=>{
+      const response = await axios.post('/savewallettaskstatus',{
+        walletAddress : walletAddress,
+        loggedUserData : loggedUserData
+      },{withCredentials : true})
+
+      if(response){
+        setWalletaddressstatus(true)
+      }else{
+        setWalletaddressstatus(false)
+      }
+
+    }}>Continue</button>
+
+    {walletAddressstatus ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
 
    
 
@@ -154,15 +204,30 @@ function Tasks() {
 
     <input className='tasks__div__checkFollower' placeholder='Enter twitter user id' value={checkFollower} onChange={(event)=> setCheckfollower(event.target.value)}/>
     <button className='tasks__div__checkFollower__button' onClick={async ()=>{
-     const response = await axios.post('/checkfollower',
-      {
-        checkFollower : checkFollower
-      },
-      { withCredentials: true }
-     )
-     console.log('response from check follower')
-     console.log(response.data.relationship.source.followed_by)
-    setTwitterfollow(response.data.relationship.source.followed_by)
+      try{
+        const response = await axios.post('/checkfollower',
+        {
+          checkFollower : checkFollower
+        },
+        { withCredentials: true }
+       )
+       console.log('response from check follower')
+       console.log(response.data.relationship.source.followed_by)
+      setTwitterfollow(response.data.relationship.source.followed_by)
+  
+      if(response){
+        await axios.post('/savefollowtaskstatus',{
+          twitterFollow : response.data.relationship.source.followed_by,
+          loggedUserData : loggedUserData
+        },{withCredentials : true});
+
+        console.log('response.data.relationship.source.followed_by')
+        console.log(response.data.relationship.source.followed_by)
+      }
+      }catch(error){
+        console.log(error)
+      }
+    
     }}>Continue</button>
 
     <p className='tasks__points__block'>+ 500</p>
@@ -194,24 +259,42 @@ function Tasks() {
     <input placeholder='enter twitter user name to check retweet' value={checkusername} onChange={(event)=> setCheckusername(event.target.value)}/>
 
     <button onClick={async ()=>{
-      const response = await axios.post('/checkretweeted',
-        {
-          checkRetweet : checkRetweet
-        },
-        { withCredentials: true }
-      )
-
      
+      try{
 
-      response.data.data.map((data)=>{
-        console.log(data.username)
+        const response = await axios.post('/checkretweeted',
+          {
+            checkRetweet : checkRetweet
+          },
+          { withCredentials: true }
+        )
+  
+        console.log('response from checkretweeted')
+        console.log(response)
 
-        if(data.username === checkusername){
-           setCheckusernameTrueorfalse(true)
-           return
-        }
+        response?.data?.data?.map((data)=>{
+          console.log(data.username)
+  
+          if(data.username === checkusername){
+            setCheckusernameTrueorfalse(true)
+             console.log('checkusernameTrueorfalse response form the server')
+             console.log(checkusernameTrueorfalse)
+            //  if(checkusernameTrueorfalse){
 
-      })
+              saveretweetstatus();
+              return
+            //  }
+            
+             }
+             
+          })
+
+      }catch(error){
+        console.log(error)
+      }
+  
+        
+      
 
 
     }}>Continue</button>
@@ -247,7 +330,16 @@ function Tasks() {
 
       console.log('response from tweet id')
     
-      console.log(response)
+      console.log(response.data)
+
+
+      if(response.data){
+        setTweet(response.data)
+
+        savetweettaskstatus()
+      }else{
+        console.log('not followed')
+      }
 
     }}>Continue</button>
 
