@@ -100,4 +100,10 @@
 }
 
 
+.telegramInput{
+    display: flex;
+    flex-direction: column;
+}
+
+
 

@@ -13,6 +13,9 @@ import { ToastContainer, toast } from 'react-toastify';
 function Tasks() {
   
     const navigate = useNavigate();
+    const [telegramInputname , setTelegraminputname] = useState('')
+    const [telegramInputemail,setTelegraminputemail] = useState('')
+    const [telegramInput,setTelegraminput] = useState(false)
     const [checkTweet,setChecktweet] = useState('')
     const [checkFollower,setCheckfollower] = useState('')
     const [checkRetweet,setCheckretweet] = useState('')
@@ -104,11 +107,15 @@ function Tasks() {
         loggedUserData : adminloginorlogoutStatus.data
       },{withCredentials: true})
 
+      const telegramtaskresponse = await axios.post('/fetchtelegramtaskresponse',{
+        loggedUserData : adminloginorlogoutStatus.data
+      },{withCredentials: true})
+
 
       setTwitterfollow(followTaskresponse?.data?.twitterFollow)
       setCheckusernameTrueorfalse(retweetTaskresponse?.data?.retweet)
       setTweet(tweettaskresponse?.data?.tweet)
-
+      setJointelegram(telegramtaskresponse?.data?.joinTelegram)
       if (walletAddresstaskresponse?.data === null){
 
         setWalletaddressstatus(false)
@@ -129,6 +136,9 @@ function Tasks() {
 
       console.log('response from tweettaskresponse')
       console.log(tweettaskresponse)
+
+      console.log('response from telegramtaskresponse')
+      console.log(telegramtaskresponse)
       
     }
 
@@ -212,8 +222,10 @@ function Tasks() {
         { withCredentials: true }
        )
        console.log('response from check follower')
+       console.log(response)
        console.log(response.data.relationship.source.followed_by)
       setTwitterfollow(response.data.relationship.source.followed_by)
+      
   
       if(response){
         await axios.post('/savefollowtaskstatus',{
@@ -228,7 +240,8 @@ function Tasks() {
         console.log(error)
       }
     
-    }}>Continue</button>
+    }}
+    >Continue</button>
 
     <p className='tasks__points__block'>+ 500</p>
 
@@ -239,12 +252,44 @@ function Tasks() {
     <div className='tasks__div'>
     <h1 className='tasks__div__heading'>3. Join @ZEPCOIN on telegram</h1>
 
-    <button className='tasks__div__button'> <a target="_blank" href='https://t.me/zepCoinOfficial' className='tasks__div__links' onClick={()=>setJointelegram(true)}>Click to Join</a></button>
+    <button className='tasks__div__button'> <a target="_blank" href='https://t.me/zepCoinOfficial' className='tasks__div__links' >Click to Join</a></button>
 
     <p className='tasks__points__block'>+ 500</p>
 
+    <button onClick={()=>{
+      setTelegraminput(true)
+    }}>continue</button>
+
+    {telegramInput ?  
+      ( <>  
+      <div className='telegramInput'> 
+      <input value={telegramInputname}  onChange={(event)=>{
+      setTelegraminputname(event.target.value)
+    }} /> 
+    
+    <input value={telegramInputemail}  onChange={(event)=>{
+      setTelegraminputemail(event.target.value)
+
+    }}/> 
+    
+    <button onClick={async ()=>{
+      const response = await axios.post('/savetelegramtaskstatus',{
+        joinTelegram : true,
+        loggedUserData : loggedUserData
+      },{withCredentials : true})
+
+      setJointelegram(true)}} >save</button>
+    
+    </div> 
+    
+    </> ) 
+    
+    : null}
+
     {joinTelegram ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
 
+
+   
     </div>
 
     <div className='tasks__div'>
@@ -261,15 +306,13 @@ function Tasks() {
     <button onClick={async ()=>{
      
       try{
-
         const response = await axios.post('/checkretweeted',
           {
             checkRetweet : checkRetweet
           },
           { withCredentials: true }
         )
-  
-        console.log('response from checkretweeted')
+      console.log('response from checkretweeted')
         console.log(response)
 
         response?.data?.data?.map((data)=>{
@@ -316,7 +359,7 @@ function Tasks() {
     
     visit- https://zepcoin.io/
     join the community also- https://bit.ly/zepcoin
-    #Zepians #newcrypto' className='tasks__div__links' onClick={()=>setTweet(true)}>Click For Tweet</a></button>
+    #Zepians #newcrypto' className='tasks__div__links' >Click For Tweet</a></button>
 
     <input className='tasks__div__checkTweet' placeholder='Enter tweet Id' value={checkTweet} onChange={(event)=> setChecktweet(event.target.value)} />
 
