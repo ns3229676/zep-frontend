@@ -222,19 +222,22 @@ function Tasks() {
         { withCredentials: true }
        )
        console.log('response from check follower')
-       console.log(response)
+       console.log(response.data.success)
        console.log(response.data.relationship.source.followed_by)
       setTwitterfollow(response.data.relationship.source.followed_by)
       
   
-      if(response){
+      if(response.data.success === true){
         await axios.post('/savefollowtaskstatus',{
           twitterFollow : response.data.relationship.source.followed_by,
           loggedUserData : loggedUserData
         },{withCredentials : true});
 
         console.log('response.data.relationship.source.followed_by')
-        console.log(response.data.relationship.source.followed_by)
+        // console.log(response.data.relationship.source.followed_by)
+      }else{
+        console.log('id is not matched with follower')
+        alert('id not matched')
       }
       }catch(error){
         console.log(error)
