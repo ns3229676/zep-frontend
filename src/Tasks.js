@@ -162,7 +162,7 @@ function Tasks() {
 
   return (
 
-    <div>
+    <div >
     <Backdrop
     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
     open={open}
@@ -222,14 +222,15 @@ function Tasks() {
         { withCredentials: true }
        )
        console.log('response from check follower')
-       console.log(response.data.success)
-       console.log(response.data.relationship.source.followed_by)
-      setTwitterfollow(response.data.relationship.source.followed_by)
+       const success = console.log(response.data.success)
+      //  console.log(response.data.relationship.source.followed_by)
+      // setTwitterfollow(response.data.relationship.source.followed_by)
       
   
-      if(response.data.success === true){
+      if(response.data.success){
         await axios.post('/savefollowtaskstatus',{
-          twitterFollow : response.data.relationship.source.followed_by,
+          // twitterFollow : response.data.relationship.source.followed_by,
+          twitterFollow : true,
           loggedUserData : loggedUserData
         },{withCredentials : true});
 
@@ -240,6 +241,8 @@ function Tasks() {
         alert('id not matched')
       }
       }catch(error){
+        console.log('catch error block')
+        // console.log(response.data.relationship.source.followed_by)
         console.log(error)
       }
     
@@ -318,7 +321,7 @@ function Tasks() {
       console.log('response from checkretweeted')
         console.log(response)
 
-        response?.data?.data?.map((data)=>{
+        const retweetDoneornot = response?.data?.data?.map((data)=>{
           console.log(data.username)
   
           if(data.username === checkusername){
@@ -327,13 +330,42 @@ function Tasks() {
              console.log(checkusernameTrueorfalse)
             //  if(checkusernameTrueorfalse){
 
-              saveretweetstatus();
-              return
+              // saveretweetstatus();
+              return 1;
             //  }
             
+             }else{
+              return 0;
              }
              
           })
+
+          // console.log('retweetDoneornot')
+          // console.log(retweetDoneornot)
+
+         const responseFromretweetDoneornot = retweetDoneornot.map((data)=>{
+            console.log(data)
+            if(data){
+              console.log('retweet done')
+              saveretweetstatus();
+            }else{
+              return 0
+              console.log('retweet not done')
+            }
+
+          })
+
+          console.log('retweetDoneornot')
+          console.log(responseFromretweetDoneornot)
+
+          if(responseFromretweetDoneornot){
+            alert('retweet not done yet')
+          }
+
+         
+
+
+          
 
       }catch(error){
         console.log(error)
@@ -385,6 +417,7 @@ function Tasks() {
         savetweettaskstatus()
       }else{
         console.log('not followed')
+        alert('not tweeted  yet')
       }
 
     }}>Continue</button>
