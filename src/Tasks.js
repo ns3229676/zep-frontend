@@ -1,7 +1,9 @@
 import React , {useEffect, useState} from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
-import './Tasks.css'
+// import './Tasks.css'
+import './Taskss.css'
+
 import { useDispatch, useSelector } from 'react-redux';
 import { addUser,removeUser } from './actions/action';
 import axios from './axios';
@@ -9,10 +11,16 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useNavigate ,Link} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import Home from './images/Home.png'
+import ARROWBUTTON from './images/arrowbutton.png'
+import ARRORTICK from './images/arrowtick.png'
 
 function Tasks() {
   
     const navigate = useNavigate();
+    const [openTelegraminput,setOpentelegraminput] = useState(false)
+    const [openFollowinput,setOpenfollowinput] = useState(false)
+    const [openWalletinput , setOpenwalleinput] = useState(false)
     const [telegramInputname , setTelegraminputname] = useState('')
     const [telegramInputemail,setTelegraminputemail] = useState('')
     const [telegramInput,setTelegraminput] = useState(false)
@@ -124,6 +132,10 @@ function Tasks() {
 
       }
 
+      if(followTaskresponse?.data?.twitterFollow){
+        setOpenfollowinput(false)
+      }
+
 
       console.log('response from fetchfollowtaskresponse')
       console.log(followTaskresponse?.data?.twitterFollow)
@@ -163,6 +175,10 @@ function Tasks() {
   return (
 
     <div >
+
+    {loggedUserData ? [provider === null ? [<button onClick={logoutAdmin} className="logout__button__forResponsive">LogOut Admin</button>] : null] : null}
+
+    <img className='tasks__backgroundImage' src={Home}/>
     <Backdrop
     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
     open={open}
@@ -170,24 +186,41 @@ function Tasks() {
     <CircularProgress color="inherit" />
   </Backdrop>
 
-    <div >
-    <h1 className='tasks__firstHeading'>CLAIM YOUR YOUR FREE 5k AIRDROP</h1>
-    {loggedUserData ? [provider === null ? [<button onClick={logoutAdmin} className="logout__button__forResponsive">LogOut Admin</button>] : null] : null}
-    </div>
+    
 
     <div className='tasks'>
 
+   
+
     
+
+    <div className='task__mainHeading' >
+    <h1 className='tasks__firstHeading'>Hey!</h1>
+    <h1 className='tasks__secondHeading'>Claim your FREE 5K Airdrop</h1>
+   
+    </div>
     
     <div className='tasks__details'>
 
+    
+
+
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>1. Enter your wallet Address</h1>
-    <input value={walletAddress} onChange={(e)=>setWalletaddress(e.target.value)} placeholder='type wallet address' className='input_wallet_address'/>
 
-    <p className='tasks__points__block'>+ 500</p>
+    <div className='tasks__div__details'>
 
-    <button onClick={async ()=>{
+    <div className='task__div__top'>
+
+    <h1 className='tasks__div__heading'>Enter your Cryto Wallet Address</h1>  
+    {walletAddressstatus ? <img className='tasks__div__details__arrows' src={ARRORTICK}/> : <img className='tasks__div__details__arrows' src={ARROWBUTTON} onClick={()=> setOpenwalleinput(true)}/>  }
+
+    </div>
+
+   {openWalletinput ?  <div className='tasks__div__bottom'>
+
+    <input value={walletAddress} onChange={(e)=>setWalletaddress(e.target.value)} placeholder='type wallet address' className='tasks__div__bottom_input'/>
+
+    <button className='tasks__div__bottom__submit__button' onClick={async ()=>{
       const response = await axios.post('/savewallettaskstatus',{
         walletAddress : walletAddress,
         loggedUserData : loggedUserData
@@ -195,23 +228,37 @@ function Tasks() {
 
       if(response){
         setWalletaddressstatus(true)
+        setOpenwalleinput(false)
       }else{
         setWalletaddressstatus(false)
       }
 
-    }}>Continue</button>
+    }}>Submit</button>
 
-    {walletAddressstatus ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
+   
+
+    </div> : null}
+
+    </div>
+
 
    
 
     </div>
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>2. Follow @ZEPCOIN on twitter</h1>
-    <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' >Click to Follow</a></button>
 
+    <div className='tasks__div__top'>
+    <h1 className='tasks__div__heading'>Follow @ZEPCOIN on twitter</h1>
+    { twitterFollow ? <img className='tasks__div__details__arrows' src={ARRORTICK}/> : <img className='tasks__div__details__arrows' src={ARROWBUTTON} onClick={()=> setOpenfollowinput(true)}/> }
+    </div>
 
+  
+
+    {openFollowinput ?
+    
+      <div className='tasks__div__bottom'>
+    <p className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' >Click to Follow</a></p>
     <input className='tasks__div__checkFollower' placeholder='Enter twitter user id' value={checkFollower} onChange={(event)=> setCheckfollower(event.target.value)}/>
     <button className='tasks__div__checkFollower__button' onClick={async ()=>{
       try{
@@ -248,26 +295,36 @@ function Tasks() {
     
     }}
     >Continue</button>
+     </div> 
 
-    <p className='tasks__points__block'>+ 500</p>
+      : null}
 
-    {twitterFollow ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
+  
 
     </div>
 
+
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>3. Join @ZEPCOIN on telegram</h1>
 
-    <button className='tasks__div__button'> <a target="_blank" href='https://t.me/zepCoinOfficial' className='tasks__div__links' >Click to Join</a></button>
+    <div className='tasks__div__top'>
+    <h1 className='tasks__div__heading'>Join @ZEPCOIN on telegram</h1>
+    { joinTelegram ? <img className='tasks__div__details__arrows' src={ARRORTICK}/> : <img className='tasks__div__details__arrows' src={ARROWBUTTON} onClick={()=> setOpentelegraminput(true)}/> } 
+    </div>
 
-    <p className='tasks__points__block'>+ 500</p>
+    
+
+   
+    
+    {openTelegraminput ?  
+      ( <>  
+        <button className='tasks__div__button'> <a target="_blank" href='https://t.me/zepCoinOfficial' className='tasks__div__links' >Click to Join</a></button>
+
+  
 
     <button onClick={()=>{
       setTelegraminput(true)
     }}>continue</button>
 
-    {telegramInput ?  
-      ( <>  
       <div className='telegramInput'> 
       <input value={telegramInputname}  onChange={(event)=>{
       setTelegraminputname(event.target.value)
@@ -292,18 +349,20 @@ function Tasks() {
     
     : null}
 
-    {joinTelegram ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
+    
+
+    
 
 
    
     </div>
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading'>4. Retweet @ZEPCOIN on twitter</h1>
+    <h1 className='tasks__div__heading'>Retweet @ZEPCOIN on twitter</h1>
 
     <button className='tasks__div__button zepcoinButton'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setRetweet(true)}>Click to Retweet</a></button>
 
-    <p className='tasks__points__block'>+ 500</p>
+   
 
     <input className='tasks__div__checkRetweet' placeholder='enter retweet page id' value={checkRetweet} onChange={(event)=>{ setCheckretweet(event.target.value)}}/>
 
@@ -384,7 +443,7 @@ function Tasks() {
 
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading tweet__on__twitter'>5. Tweet @ZEPCOIN on twitter</h1>
+    <h1 className='tasks__div__heading tweet__on__twitter'>Tweet @ZEPCOIN on twitter</h1>
 
     <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/intent/tweet?text=Guyzz I have found this intresting Crypto ICO 
     Its live now. Its $0.0001 $ZEP 🤑🤑 Zep it now.
@@ -422,19 +481,18 @@ function Tasks() {
 
     }}>Continue</button>
 
-    <p className='tasks__points__block'>+ 500</p>
+    
 
     {tweet ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
 
     </div>
 
     <div className='tasks__div'>
-    <h1 className='tasks__div__heading buy'>6. Buy ICO-ZEPCOIN</h1>
+    <h1 className='tasks__div__heading buy'>Buy ICO-ZEPCOIN</h1>
 
     <button className='tasks__div__button'><a target="_blank" href='https://twitter.com/zepcoinofficial' className='tasks__div__links' onClick={()=>setBuy(true)}>BUY NOW</a></button>
 
-    <p className='tasks__points__block'>+ 500</p>
-
+   
     {buy ?  <DoneIcon className='task__div__icon'/> : <CloseIcon className='task__div__icon'/>}
 
     </div>

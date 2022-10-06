@@ -1,0 +1,82 @@
+.tasks__backgroundImage{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+.tasks{
+    position: absolute;
+    top: 1px;
+}
+
+.task__mainHeading{
+    display: flex;
+    flex-direction: column;
+}
+
+.tasks__firstHeading{
+    color: white;
+}
+
+.tasks__secondHeading{
+    color: white;
+}
+
+.tasks__details{
+    background-color: #0C9FB3;
+    padding: 6%;
+    width: 100%;
+}
+
+
+.tasks__div{
+
+}
+
+.tasks__div__details{
+    display: flex;
+    flex-direction: column;
+}
+
+.tasks__div__heading{
+
+    background-color: #4cc8d9;
+    color: #FFFFFF;
+}
+
+
+.task__div__top{
+    display: flex;
+    align-items: center;
+}
+
+.tasks__div__bottom{
+    display: flex;
+}
+
+.tasks__div__bottom_input{
+    border: none;
+    border-radius: 40px;
+    font-size: 15px;
+    text-align: center;
+    width: 55%;
+    margin-right: 16%;
+}
+
+.tasks__div__bottom__submit__button{
+
+}
+
+.tasks__div__details__arrows{
+    width: 50px;
+    height: 50px;
+    margin-left: 4%;
+}
+
+
+/* second box */
+
+.tasks__div__top{
+    display: flex;
+    align-items: center;
+}
